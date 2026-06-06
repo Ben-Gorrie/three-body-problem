@@ -2,19 +2,38 @@ import pyglet
 
 window = pyglet.window.Window()
 
-label = pyglet.text.Label('Hello, world',
-                          font_name='Times New Roman',
-                          font_size=36,
-                          x=window.width//2, y=window.height//2,
-                          anchor_x='center', anchor_y='center')
+# Batch to group planets together
+batch = pyglet.graphics.Batch()
 
-circle = pyglet.shapes.Circle(x=300, y=300, radius=100, color=(50, 225, 30))
+planet1 = pyglet.shapes.Circle(
+    x=window.width // 2,
+    y=(2 * window.height) // 3,
+    radius=10,
+    color=(255, 0, 0),
+    batch=batch,
+)
+
+planet2 = pyglet.shapes.Circle(
+    x=window.width // 3,
+    y=window.height // 3,
+    radius=10,
+    color=(0, 255, 0),
+    batch=batch,
+)
+
+planet3 = pyglet.shapes.Circle(
+    x=(2 * window.width) // 3,
+    y=window.height // 3,
+    radius=10,
+    color=(0, 0, 255),
+    batch=batch,
+)
 
 
 @window.event
 def on_draw():
     window.clear()
-    label.draw()
-    circle.draw()
+    batch.draw()
+
 
 pyglet.app.run()
