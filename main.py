@@ -1,4 +1,5 @@
 import pyglet
+import numpy as np
 
 window = pyglet.window.Window()
 
@@ -37,7 +38,17 @@ class Planet:
         starting_v: tuple[float, float],
         starting_a: tuple[float, float],
     ):
-        self.x, self.y = starting_pos
+        # x and x_dt represents x(t) and x(t + dt)
+        self.x = np.array(starting_pos)
+
+        # Initiated to 0 as will be calculated in future
+        self.x_dt = 0
+
+        self.v = np.array(starting_v)
+        self.v_dt = 0
+
+        self.a = np.array(starting_a)
+        self.a_dt = 0
 
 
 @window.event
