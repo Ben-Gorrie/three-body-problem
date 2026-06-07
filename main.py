@@ -52,8 +52,11 @@ class Planet:
         self.a = np.array(starting_a)
         self.a_dt = 0
 
+    # Compute the displacement at x(t + dt) using the velocity verlet from https://en.wikipedia.org/wiki/Verlet_integration#Velocity_Verlet
     def calculate_next_displacement(self):
         self.x_dt = self.x + self.v * dt + 0.5 * self.a * dt**2
+
+    # def compute_next_acceleration(self, other_planets : list[Planet]):
 
 
 @window.event
