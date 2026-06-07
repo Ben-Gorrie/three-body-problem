@@ -30,6 +30,16 @@ planet3 = pyglet.shapes.Circle(
 )
 
 
+class Planet:
+    def __init__(
+        self,
+        starting_pos: tuple[float, float],
+        starting_v: tuple[float, float],
+        starting_a: tuple[float, float],
+    ):
+        self.x, self.y = starting_pos
+
+
 @window.event
 def on_draw():
     window.clear()
