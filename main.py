@@ -6,6 +6,8 @@ window = pyglet.window.Window()
 # Batch to group planets together
 batch = pyglet.graphics.Batch()
 
+dt = 0.1
+
 planet1 = pyglet.shapes.Circle(
     x=window.width // 2,
     y=(2 * window.height) // 3,
@@ -49,6 +51,9 @@ class Planet:
 
         self.a = np.array(starting_a)
         self.a_dt = 0
+
+    def calculate_next_displacement(self):
+        self.x_dt = self.x + self.v * dt + 0.5 * self.a * dt**2
 
 
 @window.event
