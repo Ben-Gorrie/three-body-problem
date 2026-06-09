@@ -6,8 +6,8 @@ window = pyglet.window.Window()
 # Batch to group planets together
 batch = pyglet.graphics.Batch()
 
-dt = 0.1
-G = 6.674 * 10 ** (-11)
+dt = 1/60.0
+G = 100
 
 
 class Planet:
@@ -50,7 +50,10 @@ class Planet:
 
         for planet in all_planets:
             if planet is not self:
-                total_a += (G * planet.m) / (self.x_dt - planet.x_dt) ** 2
+                r = planet.x_dt - self.x_dt
+                dist = np.linalg.norm(r)
+                if dist != 0:
+                    total_a += G * planet.m * r / dist**3
 
         self.a_dt = total_a
 
@@ -58,16 +61,22 @@ class Planet:
     def compute_next_velocity(self):
         self.v_dt = self.v + 0.5 * (self.a + self.a_dt) * dt
 
+    def set_current_params(self):
+        self.x = self.x_dt
+        self.v = self.v_dt
+        self.a = self.a_dt
+
     def update_graphics(self):
         self.circle.x = self.x[0]
         self.circle.y = self.x[1]
 
 
+
 p1 = Planet(
     starting_pos=(window.width // 2, (2 * window.height) // 3),
-    starting_v=(1, 0),
+    starting_v=(10, 0),
     starting_a=(1, 0),
-    mass=100,
+    mass=1000,
     radius=10,
     color=(255, 0, 0),
     batch=batch,
@@ -75,9 +84,9 @@ p1 = Planet(
 
 p2 = Planet(
     starting_pos=(window.width // 3, window.height // 3),
-    starting_v=(0, 1),
+    starting_v=(0, 10),
     starting_a=(0, 1),
-    mass=100,
+    mass=1000,
     radius=10,
     color=(0, 255, 0),
     batch=batch,
@@ -85,14 +94,27 @@ p2 = Planet(
 
 p3 = Planet(
     starting_pos=((2 * window.width) // 3, window.height // 3),
-    starting_v=(0, -1),
+    starting_v=(0, -10),
     starting_a=(0, -1),
-    mass=100,
+    mass=1000,
     radius=10,
     color=(0, 0, 255),
     batch=batch,
 )
 
+planets = [p1, p2, p3]
+
+def update(dt):
+    for planet in planets:
+        planet.compute_next_displacement()
+        planet.compute_next_acceleration(planets)
+        planet.compute_next_velocity()
+        planet.set_current_params()
+        planet.update_graphics()
+
+pyglet.clock.schedule_interval(update, dt)
+
+    
 
 @window.event
 def on_draw():
