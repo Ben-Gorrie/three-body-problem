@@ -60,14 +60,17 @@ class Planet:
     def compute_next_displacement(self):
         self.x_dt = self.x + self.v * dt + 0.5 * self.a * dt**2
 
-    def compute_next_acceleration(self, other_planets: list[Planet]):
+    # Compute the acceleration at a(t + dt). This uses newton's law of universal gravitation
+    def compute_next_acceleration(self, all_planets: list[Planet]):
         total_a = 0
 
-        for planet in other_planets:
-            total_a += (G * planet.m) / (self.x_dt - planet.x_dt) ** 2
+        for planet in all_planets:
+            if planet is not self:
+                total_a += (G * planet.m) / (self.x_dt - planet.x_dt) ** 2
 
         self.a_dt = total_a
 
+    # Compute the velocity at v(t + dt)
     def compute_next_velocity(self):
         self.v_dt = self.v + 0.5 * (self.a + self.a_dt) * dt
 
