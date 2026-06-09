@@ -51,9 +51,12 @@ class Planet:
         for planet in all_planets:
             if planet is not self:
                 r = planet.x_dt - self.x_dt
-                dist = np.linalg.norm(r)
-                if dist != 0:
-                    total_a += G * planet.m * r / dist**3
+                epsilon = 5.0 # randomly chosen
+
+                dist_sq = np.dot(r, r) + epsilon**2
+                #dist = np.sqrt(dist_sq)
+
+                total_a += G * planet.m * r / dist_sq**1.5
 
         self.a_dt = total_a
 
@@ -102,7 +105,17 @@ p3 = Planet(
     batch=batch,
 )
 
-planets = [p1, p2, p3]
+p4 = Planet(
+    starting_pos=((2.5 * window.width) // 3, window.height // 3),
+    starting_v=(0, 0),
+    starting_a=(0, 1),
+    mass=1000,
+    radius=10,
+    color=(0, 255, 255),
+    batch=batch,
+)
+
+planets = [p1, p2, p3, p4]
 
 def update(dt):
     for planet in planets:
