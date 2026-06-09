@@ -9,30 +9,6 @@ batch = pyglet.graphics.Batch()
 dt = 0.1
 G = 6.674 * 10 ** (-11)
 
-planet1 = pyglet.shapes.Circle(
-    x=window.width // 2,
-    y=(2 * window.height) // 3,
-    radius=10,
-    color=(255, 0, 0),
-    batch=batch,
-)
-
-planet2 = pyglet.shapes.Circle(
-    x=window.width // 3,
-    y=window.height // 3,
-    radius=10,
-    color=(0, 255, 0),
-    batch=batch,
-)
-
-planet3 = pyglet.shapes.Circle(
-    x=(2 * window.width) // 3,
-    y=window.height // 3,
-    radius=10,
-    color=(0, 0, 255),
-    batch=batch,
-)
-
 
 class Planet:
     def __init__(
@@ -41,6 +17,9 @@ class Planet:
         starting_v: tuple[float, float],
         starting_a: tuple[float, float],
         mass: float,
+        radius: int,
+        color: tuple[int, int, int],
+        batch,
     ):
         # x and x_dt represents x(t) and x(t + dt)
         self.x = np.array(starting_pos)
@@ -55,6 +34,11 @@ class Planet:
         self.a_dt = 0
 
         self.m = mass
+
+        # Graphical representation
+        self.circle = pyglet.shapes.Circle(
+            x=self.x[0], y=self.x[1], radius=radius, color=color, batch=batch
+        )
 
     # Compute the displacement at x(t + dt) using the velocity verlet from https://en.wikipedia.org/wiki/Verlet_integration#Velocity_Verlet
     def compute_next_displacement(self):
@@ -73,6 +57,41 @@ class Planet:
     # Compute the velocity at v(t + dt)
     def compute_next_velocity(self):
         self.v_dt = self.v + 0.5 * (self.a + self.a_dt) * dt
+
+    def update_graphics(self):
+        self.circle.x = self.x[0]
+        self.circle.y = self.x[1]
+
+
+p1 = Planet(
+    starting_pos=(window.width // 2, (2 * window.height) // 3),
+    starting_v=(1, 0),
+    starting_a=(1, 0),
+    mass=100,
+    radius=10,
+    color=(255, 0, 0),
+    batch=batch,
+)
+
+p2 = Planet(
+    starting_pos=(window.width // 3, window.height // 3),
+    starting_v=(0, 1),
+    starting_a=(0, 1),
+    mass=100,
+    radius=10,
+    color=(0, 255, 0),
+    batch=batch,
+)
+
+p3 = Planet(
+    starting_pos=((2 * window.width) // 3, window.height // 3),
+    starting_v=(0, -1),
+    starting_a=(0, -1),
+    mass=100,
+    radius=10,
+    color=(0, 0, 255),
+    batch=batch,
+)
 
 
 @window.event
