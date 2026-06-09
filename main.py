@@ -7,6 +7,7 @@ window = pyglet.window.Window()
 batch = pyglet.graphics.Batch()
 
 dt = 0.1
+G = 6.674 * 10 ** (-11)
 
 planet1 = pyglet.shapes.Circle(
     x=window.width // 2,
@@ -39,6 +40,7 @@ class Planet:
         starting_pos: tuple[float, float],
         starting_v: tuple[float, float],
         starting_a: tuple[float, float],
+        mass: float,
     ):
         # x and x_dt represents x(t) and x(t + dt)
         self.x = np.array(starting_pos)
@@ -52,11 +54,22 @@ class Planet:
         self.a = np.array(starting_a)
         self.a_dt = 0
 
+        self.m = mass
+
     # Compute the displacement at x(t + dt) using the velocity verlet from https://en.wikipedia.org/wiki/Verlet_integration#Velocity_Verlet
-    def calculate_next_displacement(self):
+    def compute_next_displacement(self):
         self.x_dt = self.x + self.v * dt + 0.5 * self.a * dt**2
 
-    # def compute_next_acceleration(self, other_planets : list[Planet]):
+    def compute_next_acceleration(self, other_planets: list[Planet]):
+        total_a = 0
+
+        for planet in other_planets:
+            total_a += (G * planet.m) / (self.x_dt - planet.x_dt) ** 2
+
+        self.a_dt = total_a
+
+    def compute_next_velocity(self):
+        self.v_dt = self.v + 0.5 * (self.a + self.a_dt) * dt
 
 
 @window.event
