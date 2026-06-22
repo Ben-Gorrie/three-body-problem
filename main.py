@@ -1,6 +1,7 @@
 import pyglet
 import numpy as np
 from pyglet.window import mouse
+from pyglet.window import key
 
 window = pyglet.window.Window(fullscreen=True)
 
@@ -128,20 +129,6 @@ def update(dt):
 
 pyglet.clock.schedule_interval(update, dt)
 
-#pyglet.clock.schedule_interval_for_duration(spawn_planet, 5, 25) 
-# def spawn_planet(time):
-#     p = Planet(
-#         starting_pos = (window.width // 2, window.height // 2),
-#         starting_v = (1, 1),
-#         starting_a = (0, 0),
-#         mass = 1000,
-#         radius = 10,
-#         color = (255, 255, 255),
-#         batch = batch,
-#     )
-
-#     planets.append(p)
-
 def spawn_planet(x, y):
     p = Planet(
         starting_pos = (x, y),
@@ -159,6 +146,24 @@ def spawn_planet(x, y):
 def on_mouse_press(x, y, button, modifiers):
     spawn_planet(x, y)
     print("Spawning planet")
+
+@window.event
+def on_key_press(symbol, modifiers):
+    if symbol == key.S:
+
+        p = Planet(
+            starting_pos = (window.width // 2, window.height // 2),
+            starting_v = (0, 0),
+            starting_a = (0, 0),
+            mass = 20000,
+            radius = 30,
+            color = (255, 255, 0),
+            batch = batch,
+        )
+
+        planets.append(p)
+        print("Spawning Sun")
+
     
 
 @window.event
