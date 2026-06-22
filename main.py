@@ -139,7 +139,7 @@ def update(dt):
 
 pyglet.clock.schedule_interval(update, dt)
 
-pyglet.clock.schedule_once(spawn_planet, 5) 
+pyglet.clock.schedule_interval_for_duration(spawn_planet, 5, 25) 
 
     
 
