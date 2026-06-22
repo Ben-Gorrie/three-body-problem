@@ -1,13 +1,13 @@
 import pyglet
 import numpy as np
 
-window = pyglet.window.Window()
+window = pyglet.window.Window(fullscreen=True)
 
 # Batch to group planets together
 batch = pyglet.graphics.Batch()
 
 dt = 1/60.0
-G = 100
+G = 300
 
 
 class Planet:
@@ -41,7 +41,7 @@ class Planet:
         )
 
     # Compute the displacement at x(t + dt) using the velocity verlet from https://en.wikipedia.org/wiki/Verlet_integration#Velocity_Verlet
-    def compute_next_displacement(self):
+    def compute_next_displacement(self, dt):
         self.x_dt = self.x + self.v * dt + 0.5 * self.a * dt**2
 
     # Compute the acceleration at a(t + dt). This uses newton's law of universal gravitation
@@ -61,7 +61,7 @@ class Planet:
         self.a_dt = total_a
 
     # Compute the velocity at v(t + dt)
-    def compute_next_velocity(self):
+    def compute_next_velocity(self, dt):
         self.v_dt = self.v + 0.5 * (self.a + self.a_dt) * dt
 
     def set_current_params(self):
@@ -119,9 +119,9 @@ planets = [p1, p2, p3, p4]
 
 def update(dt):
     for planet in planets:
-        planet.compute_next_displacement()
+        planet.compute_next_displacement(dt)
         planet.compute_next_acceleration(planets)
-        planet.compute_next_velocity()
+        planet.compute_next_velocity(dt)
         planet.set_current_params()
         planet.update_graphics()
 
