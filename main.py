@@ -149,7 +149,7 @@ def spawn_planet(x, y):
         starting_a = (0, 0),
         mass = 1000,
         radius = 10,
-        color = (min(x, 255), min(y, 255), min(x + y, 255)),
+        color = (int((x / window.width) * 255), int((y / window.height) * 255), 0),
         batch = batch,
     )
 
