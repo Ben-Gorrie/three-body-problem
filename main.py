@@ -73,6 +73,18 @@ class Planet:
         self.circle.x = self.x[0]
         self.circle.y = self.x[1]
 
+def spawn_planet(time):
+    p = Planet(
+        starting_pos = (window.width // 2, window.height // 2),
+        starting_v = (1, 1),
+        starting_a = (0, 0),
+        mass = 1000,
+        radius = 10,
+        color = (255, 255, 255),
+        batch = batch,
+    )
+
+    planets.append(p)
 
 
 p1 = Planet(
@@ -126,6 +138,8 @@ def update(dt):
         planet.update_graphics()
 
 pyglet.clock.schedule_interval(update, dt)
+
+pyglet.clock.schedule_once(spawn_planet, 5) 
 
     
 
