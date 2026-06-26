@@ -41,6 +41,8 @@ class Planet:
 
         self.m = mass
 
+        self.radius = radius
+
         # Graphical representation
         self.circle = pyglet.shapes.Circle(
             x=self.x[0], y=self.x[1], radius=radius, color=color, batch=batch
@@ -57,10 +59,9 @@ class Planet:
         for planet in all_planets:
             if planet is not self:
                 r = planet.x_dt - self.x_dt
-                epsilon = 5.0 # randomly chosen
+                epsilon = planet.radius + self.radius
 
                 dist_sq = np.dot(r, r) + epsilon**2
-                #dist = np.sqrt(dist_sq)
 
                 total_a += G * planet.m * r / dist_sq**1.5
 
