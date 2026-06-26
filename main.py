@@ -3,9 +3,13 @@ import numpy as np
 from pyglet.window import mouse
 from pyglet.window import key
 
+# Main window
 window = pyglet.window.Window(fullscreen=True)
 
-# Batch to group planets together
+# FPS tracker
+fps_display = pyglet.window.FPSDisplay(window=window, color=(0, 255, 0, 200))
+
+# Batch to group drawing planets together
 batch = pyglet.graphics.Batch()
 
 dt = 1/60.0
@@ -149,6 +153,7 @@ def on_mouse_press(x, y, button, modifiers):
 
 @window.event
 def on_key_press(symbol, modifiers):
+    # Spawn a sun in the middle of the screen if the s key is pressed
     if symbol == key.S:
 
         p = Planet(
@@ -164,12 +169,12 @@ def on_key_press(symbol, modifiers):
         planets.append(p)
         print("Spawning Sun")
 
-    
-
 @window.event
 def on_draw():
     window.clear()
     batch.draw()
 
+    # Show FPS
+    fps_display.draw() 
 
 pyglet.app.run()
