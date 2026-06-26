@@ -26,6 +26,7 @@ class Planet:
         radius: int,
         color: tuple[int, int, int],
         batch,
+        show_trail : bool = False,
     ):
         # x and x_dt represents x(t) and x(t + dt)
         self.x = np.array(starting_pos)
@@ -47,6 +48,12 @@ class Planet:
         self.circle = pyglet.shapes.Circle(
             x=self.x[0], y=self.x[1], radius=radius, color=color, batch=batch
         )
+
+        if show_trail:
+            # Trail behind planet
+            self.trail = pyglet.shapes.BezierCurve(
+                starting_pos, batch=batch
+            )
 
     # Compute the displacement at x(t + dt) using the velocity verlet from https://en.wikipedia.org/wiki/Verlet_integration#Velocity_Verlet
     def compute_next_displacement(self, dt):
@@ -135,7 +142,7 @@ def update(dt):
         planet.compute_next_acceleration(planets)
         planet.compute_next_velocity(dt)
 
-        # If planet is out of range, despawn it for performance
+        # If planet is out of range, despawn it for performance. Does this actually work? (is the object still getting drawn?)
         if np.abs(planet.x_dt[0]) > window.width * 2 or np.abs(planet.x_dt[1]) > window.height * 2:
             print("Despawning planet")
             planets.remove(planet)
