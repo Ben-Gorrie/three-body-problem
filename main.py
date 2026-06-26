@@ -56,6 +56,11 @@ class Planet:
     def compute_next_acceleration(self, all_planets: list[Planet]):
         total_a = 0
 
+        # If planet is out of range, set acceleration to 0
+        if np.abs(self.x_dt[0]) > window.width * 1.3 or np.abs(self.x_dt[1]) > window.height * 1.3:
+            self.a_dt = 0
+            return None
+
         for planet in all_planets:
             if planet is not self:
                 r = planet.x_dt - self.x_dt
@@ -129,6 +134,12 @@ def update(dt):
         planet.compute_next_displacement(dt)
         planet.compute_next_acceleration(planets)
         planet.compute_next_velocity(dt)
+
+        # If planet is out of range, despawn it for performance
+        if np.abs(planet.x_dt[0]) > window.width * 2 or np.abs(planet.x_dt[1]) > window.height * 2:
+            print("Despawning planet")
+            planets.remove(planet)
+
         planet.set_current_params()
         planet.update_graphics()
 
